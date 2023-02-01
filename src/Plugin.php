@@ -117,6 +117,7 @@ class Plugin implements AddsOutput, HandlesArguments
         // Get all nodes which were visited.
         $collector = Collector::parseResult();
         $dottedTestedNodes = array_filter(array_unique($collector));
+        $dottedTestedNodes = array_combine($dottedTestedNodes, $dottedTestedNodes);
 
         // Get all nodes in the schema
         $nodes = $this->collectAllNodesFromSchema();
