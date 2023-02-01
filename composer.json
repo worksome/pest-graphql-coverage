@@ -1,58 +1,50 @@
 {
-    "name": "vendor-slug/package-slug",
-    "description": ":package_description",
+    "name": "worksome/pest-graphql-coverage",
+    "description": "A plugin for PestPHP to add GraphQL coverage via LighthousePHP",
     "keywords": [
-        ":vendor_name",
+        "worksome",
         "laravel",
-        ":package_slug"
+        "pest-graphql-coverage"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/worksome/pest-graphql-coverage",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Oliver Nybroe",
+            "email": "oliver@worksome.com",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.2",
-        "spatie/laravel-package-tools": "^1.13.8",
-        "illuminate/contracts": "^9.46"
+        "illuminate/contracts": "^9.46",
+        "nuwave/lighthouse": "dev-master",
+        "pestphp/pest": "^1.22.3",
+        "pestphp/pest-plugin-laravel": "^1.3"
     },
     "require-dev": {
         "nunomaduro/collision": "^6.4",
         "nunomaduro/larastan": "^2.3.4",
         "orchestra/testbench": "^7.18",
-        "pestphp/pest": "^1.22.3",
-        "pestphp/pest-plugin-laravel": "^1.3",
+
         "pestphp/pest-plugin-parallel": "^1.2",
-        "spatie/laravel-ray": "^1.31",
         "worksome/coding-style": "^2.3.2",
         "worksome/pest-plugin-silence": "^0.1.2"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Worksome\\PestGraphqlCoverage\\": "src"
         }
     },
     "scripts": {
         "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
         "lint": "vendor/bin/ecs --fix",
-        "test:unit": "vendor/bin/pest -p",
         "test:coverage": "vendor/bin/pest -p --coverage",
         "test:types": "vendor/bin/phpstan analyse",
         "test:style": "vendor/bin/ecs",
         "test": [
             "@test:style",
-            "@test:types",
-            "@test:unit"
+            "@test:types"
         ]
     },
     "config": {
@@ -66,11 +58,16 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Worksome\\PestGraphqlCoverage\\PestGraphqlCoverageServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "PestGraphqlCoverage": "Worksome\\PestGraphqlCoverage\\Facades\\PestGraphqlCoverage"
             }
+        },
+        "pest": {
+            "plugins": [
+                "\\Worksome\\PestGraphqlCoverage\\Plugin"
+            ]
         }
     },
     "minimum-stability": "dev",
