@@ -90,9 +90,9 @@ class Plugin implements AddsOutput, HandlesArguments
         $this->coverageMin = (int) $matches[1];
     }
 
-    private function handleSchemaCommand(array $arguments): void
+    private function handleSchemaCommand(array &$arguments): void
     {
-        $schemaCommandRegex = /** @lang RegExp */ '/^--schema-command="(.*)"$/';
+        $schemaCommandRegex = /** @lang RegExp */ '/^--schema-command=(.*)$/';
         $command = preg_grep($schemaCommandRegex, $arguments);
 
         if ($command === false || count($command) === 0) {
@@ -149,7 +149,13 @@ class Plugin implements AddsOutput, HandlesArguments
 
     private function collectAllNodesFromSchema(): array
     {
-        exec($this->schemaCommand, $output);
+        exec($this->schemaCommand, $output, $code);
+
+        if ($code !== 0) {
+            $this->output->writeln("Schema command failed: $code");
+            throw new \RuntimeException("invalid command");
+        }
+
         $output = implode(PHP_EOL, $output);
         $schema = Parser::parse($output);
 
