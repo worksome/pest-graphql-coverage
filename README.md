@@ -10,7 +10,7 @@ This plugin adds supports for showing the coverage of the GraphQL schema (Lighth
 You can install the package via composer:
 
 ```bash
-composer require worksome/pest-graphql-coverage
+composer require --dev worksome/pest-graphql-coverage
 ```
 
 
