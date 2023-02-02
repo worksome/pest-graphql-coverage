@@ -1,4 +1,4 @@
-# PestPHP GraphQl Coverage
+# PestPHP GraphQL Coverage
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/worksome/pest-graphql-coverage.svg?style=flat-square)](https://packagist.org/packages/worksome/pest-graphql-coverage)
 [![Total Downloads](https://img.shields.io/packagist/dt/worksome/pest-graphql-coverage.svg?style=flat-square)](https://packagist.org/packages/worksome/pest-graphql-coverage)
@@ -34,13 +34,29 @@ By adding the argument `--gql-min=<percentage>`, we can limit to have a min cove
 php artisan test --gql-coverage --gql-min=60
 ```
 
-### Changing default schema fetching command
-By default it will fetch the schema using `php artisan lighthouse:print-schema`, however if you have a
-custom command for fetching the schema, that can be used instead by adding `--schema-command` argument
+### Setting the number of output fields
 
+By adding the argument  `--gql-untested-count=<max>`, we can increase or reduce the number of untested fields
+that are output.
+
+```shell
+php artisan test --gql-coverage --gql-untested-count=25
+```
+
+### Changing default schema fetching command
+By default, it will fetch the schema using `php artisan lighthouse:print-schema`, however if you have a
+custom command for fetching the schema, that can be used instead by adding `--schema-command` argument
 
 ```bash
 php artisan test --gql-coverage --schema-command="php artisan lighthouse:print-schema-v2"
+```
+
+### Native Pest usage
+
+This also works natively with Pest (without using Artisan), as it is a Pest plugin.
+
+```shell
+vendor/bin/pest --gql-coverage
 ```
 
 ## License

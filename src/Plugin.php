@@ -23,6 +23,8 @@ class Plugin implements AddsOutput, HandlesArguments
 
     public bool $coverage = false;
 
+    public int $maxUntestedFieldsCount = 10;
+
     public string $schemaCommand = 'php artisan lighthouse:print-schema';
 
     /**
@@ -55,6 +57,8 @@ class Plugin implements AddsOutput, HandlesArguments
         Collector::reset();
 
         $this->handleMinCoverage($arguments);
+
+        $this->handleMaxUntestedFields($arguments);
 
         $this->handleSchemaCommand($arguments);
 
@@ -106,6 +110,22 @@ class Plugin implements AddsOutput, HandlesArguments
         $this->schemaCommand = $matches[1];
     }
 
+    private function handleMaxUntestedFields(array &$arguments): void
+    {
+        $maxUntestedFieldsRegex = /** @lang RegExp */ '/^--gql-untested-count=(.*)$/';
+        $command = preg_grep($maxUntestedFieldsRegex, $arguments);
+
+        if ($command === false || count($command) === 0) {
+            return;
+        }
+
+        unset($arguments[array_keys($command)[0]]);
+
+        preg_match($maxUntestedFieldsRegex, array_pop($command), $matches);
+
+        $this->maxUntestedFieldsCount = is_numeric($matches[1]) ? (int) $matches[1] : $this->maxUntestedFieldsCount;
+    }
+
     public function addOutput(int $testReturnCode): int
     {
         if ($this->coverage === false) {
@@ -136,8 +156,8 @@ class Plugin implements AddsOutput, HandlesArguments
 
         if ($untested !== []) {
             $style->newLine();
-            $style->writeln("Untested fields (max. 5): ");
-            $style->listing(array_keys(array_slice($untested, 0, 5)));
+            $style->writeln("Untested fields (max. {$this->maxUntestedFieldsCount}): ");
+            $style->listing(array_keys(array_slice($untested, 0, $this->maxUntestedFieldsCount)));
         }
 
         if ($this->coverageMin > $percentage) {
