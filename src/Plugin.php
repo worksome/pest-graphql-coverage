@@ -143,16 +143,15 @@ class Plugin implements AddsOutput, HandlesArguments
         $nodes = $this->collectAllNodesFromSchema();
         $dottedNodes = Arr::dot($nodes);
 
-        // Count the nodes and calculate the percentage of tested nodes.
-        $totalNodes = count($dottedNodes);
-        $totalTestedNodes = count($dottedTestedNodes);
-        $percentage = round($totalTestedNodes / $totalNodes, 4) * 100;
-
-
-        $style->writeln("GraphQL coverage:  $percentage% ($totalTestedNodes/$totalNodes fields)");
-
         // Create an array of all untested nodes.
         $untested = array_diff_key($dottedNodes, $dottedTestedNodes);
+
+        // Count the nodes and calculate the percentage of tested nodes.
+        $totalNodes = count($dottedNodes);
+        $totalTestedNodes = $totalNodes - count($untested);
+        $percentage = round($totalTestedNodes / $totalNodes, 4) * 100;
+
+        $style->writeln("GraphQL coverage:  $percentage% ($totalTestedNodes/$totalNodes fields)");
 
         if ($untested !== []) {
             $style->newLine();
