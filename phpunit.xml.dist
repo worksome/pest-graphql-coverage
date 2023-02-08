@@ -9,7 +9,6 @@
     failOnRisky="true"
     failOnEmptyTestSuite="true"
     beStrictAboutOutputDuringTests="true"
-    verbose="true"
 >
     <testsuites>
         <testsuite name="Worksome Test Suite">
