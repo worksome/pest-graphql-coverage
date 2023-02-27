@@ -14,10 +14,8 @@ class CollectFieldMiddleware implements FieldMiddleware
         return "";
     }
 
-    public function handleField(FieldValue $fieldValue, \Closure $next)
+    public function handleField(FieldValue $fieldValue): void
     {
         Collector::addResult($fieldValue);
-
-        return $next($fieldValue);
     }
 }
