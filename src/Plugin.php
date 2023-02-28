@@ -182,6 +182,7 @@ class Plugin implements AddsOutput, HandlesArguments
 
         $nodes = [];
 
+        /** @phpstan-ignore-next-line */
         Visitor::visit($schema->definitions, [
             NodeKind::FIELD_DEFINITION => function (FieldDefinitionNode $node, $key, $parent, $path, $ancestors) use (
                 &$nodes
