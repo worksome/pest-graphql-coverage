@@ -18,7 +18,7 @@
     "require": {
         "php": "^8.2",
         "illuminate/contracts": "^9.46 || ^10.0",
-        "nuwave/lighthouse": "dev-master",
+        "nuwave/lighthouse": "^6.0.0",
         "pestphp/pest": "^1.22.3",
         "pestphp/pest-plugin-laravel": "^1.3"
     },
