@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Worksome\PestGraphqlCoverage;
 
+use GraphQL\Language\AST\FieldDefinitionNode;
 use GraphQL\Language\AST\InterfaceTypeDefinitionNode;
 use GraphQL\Language\AST\NodeKind;
 use GraphQL\Language\Parser;
@@ -180,8 +181,12 @@ class Plugin implements AddsOutput, HandlesArguments
         $schema = Parser::parse($output);
 
         $nodes = [];
+
+        /** @phpstan-ignore-next-line */
         Visitor::visit($schema->definitions, [
-            NodeKind::FIELD_DEFINITION => function ($node, $key, $parent, $path, $ancestors) use (&$nodes) {
+            NodeKind::FIELD_DEFINITION => function (FieldDefinitionNode $node, $key, $parent, $path, $ancestors) use (
+                &$nodes
+            ) {
                 $parentType = $ancestors[1];
 
                 if ($parentType instanceof InterfaceTypeDefinitionNode) {
@@ -191,6 +196,7 @@ class Plugin implements AddsOutput, HandlesArguments
                 $nodes[$parentType->name->value][$node->name->value] = true;
             }
         ]);
+
         return $nodes;
     }
 }

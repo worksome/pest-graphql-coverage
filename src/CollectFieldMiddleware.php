@@ -11,7 +11,7 @@ class CollectFieldMiddleware implements FieldMiddleware
 {
     public static function definition(): string
     {
-        return "";
+        return '';
     }
 
     public function handleField(FieldValue $fieldValue): void
