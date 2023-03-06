@@ -26,7 +26,7 @@
         "brianium/paratest": "^7.1",
         "nunomaduro/collision": "^7.0",
         "nunomaduro/larastan": "^2.4",
-        "orchestra/testbench": "^7.18 || ^8.0",
+        "orchestra/testbench": "^8.0",
         "worksome/coding-style": "^2.5"
     },
     "autoload": {
