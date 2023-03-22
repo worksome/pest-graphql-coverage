@@ -16,7 +16,7 @@ class PestGraphqlCoverageServiceProvider extends ServiceProvider
         }
 
         // Check if gql coverage is enabled, either via parallel or non-parallel
-        if (Plugin::hasParallelCoverageEnabled() || Plugin::hasNonParallelCoverageEnabled()) {
+        if (Plugin::isEnabled()) {
             /** @var Repository $config */
             $config = $this->app->get(Repository::class);
             $config->push('lighthouse.field_middleware', CollectFieldMiddleware::class);
