@@ -37,7 +37,7 @@ class Plugin implements AddsOutput, HandlesArguments
 
     public static function isEnabled(): bool
     {
-        return ((bool) Parallel::getGlobal(self::SERVER_VARIABLE_NAME)) ?? false;
+        return (bool) (Parallel::getGlobal(self::SERVER_VARIABLE_NAME) ?? false);
     }
 
     public function handleArguments(array $arguments): array
