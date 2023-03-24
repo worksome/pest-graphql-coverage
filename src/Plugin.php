@@ -12,6 +12,8 @@ use GraphQL\Language\Visitor;
 use Illuminate\Support\Arr;
 use Pest\Contracts\Plugins\AddsOutput;
 use Pest\Contracts\Plugins\HandlesArguments;
+use Pest\Plugins\Parallel;
+use RuntimeException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -19,10 +21,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class Plugin implements AddsOutput, HandlesArguments
 {
     private const SERVER_VARIABLE_NAME = 'GQL_COVERAGE_ENABLED';
-    private const PARALLEL_RUNNER_ARGUMENT = '--runner=\Illuminate\Testing\ParallelRunner';
-    private const PARALLEL_ARG = "-d GQL_COVERAGE_ENABLED=1";
-
-    public bool $coverage = false;
 
     public int $maxUntestedFieldsCount = 10;
 
@@ -37,23 +35,22 @@ class Plugin implements AddsOutput, HandlesArguments
     {
     }
 
-    public static function hasNonParallelCoverageEnabled(): bool
+    public static function isEnabled(): bool
     {
-        return (bool) ($_SERVER[self::SERVER_VARIABLE_NAME] ?? false);
-    }
-
-    public static function hasParallelCoverageEnabled(): bool
-    {
-        return (bool) array_search(self::PARALLEL_ARG, $_SERVER['argv']);
+        return Parallel::getGlobal(self::SERVER_VARIABLE_NAME) ?? false;
     }
 
     public function handleArguments(array $arguments): array
     {
-        if (! ($coverageIndex = array_search('--gql-coverage', $arguments))) {
-            $this->coverage = false;
+        if (!($coverageIndex = array_search('--gql-coverage', $arguments)) && !self::isEnabled()) {
             return $arguments;
         }
-        $this->handleEnablingCoverage($arguments, $coverageIndex);
+
+        if ($coverageIndex) {
+            unset($arguments[$coverageIndex]);
+        }
+
+        $this->handleEnablingCoverage($arguments);
 
         Collector::reset();
 
@@ -66,23 +63,15 @@ class Plugin implements AddsOutput, HandlesArguments
         return $arguments;
     }
 
-    private function handleEnablingCoverage(array &$arguments, int $coverageIndex): void
+    private function handleEnablingCoverage(array &$arguments): void
     {
-        unset($arguments[$coverageIndex]);
-        $this->coverage = true;
-
-        // Tell non-parallel processes that graphql coverage is enabled.
-        $_SERVER[self::SERVER_VARIABLE_NAME] = true;
-
-        // Tell parallel processes that graphql coverage is enabled.
-        if (array_search(self::PARALLEL_RUNNER_ARGUMENT, $arguments)) {
-            $arguments[] = sprintf('--passthru="%s"', self::PARALLEL_ARG);
-        }
+        Parallel::setGlobal(self::SERVER_VARIABLE_NAME, true);
     }
 
     private function handleMinCoverage(array &$arguments): void
     {
-        $coverageMinRegex = /** @lang RegExp */ '/^--gql-min=(\d+)$/';
+        $coverageMinRegex = /** @lang RegExp */
+            '/^--gql-min=(\d+)$/';
         $min = preg_grep($coverageMinRegex, $arguments);
 
         if ($min === false || count($min) === 0) {
@@ -92,12 +81,13 @@ class Plugin implements AddsOutput, HandlesArguments
         unset($arguments[array_keys($min)[0]]);
 
         preg_match($coverageMinRegex, array_pop($min), $matches);
-        $this->coverageMin = (int) $matches[1];
+        $this->coverageMin = (int)$matches[1];
     }
 
     private function handleSchemaCommand(array &$arguments): void
     {
-        $schemaCommandRegex = /** @lang RegExp */ '/^--schema-command=(.*)$/';
+        $schemaCommandRegex = /** @lang RegExp */
+            '/^--schema-command=(.*)$/';
         $command = preg_grep($schemaCommandRegex, $arguments);
 
         if ($command === false || count($command) === 0) {
@@ -113,7 +103,8 @@ class Plugin implements AddsOutput, HandlesArguments
 
     private function handleMaxUntestedFields(array &$arguments): void
     {
-        $maxUntestedFieldsRegex = /** @lang RegExp */ '/^--gql-untested-count=(.*)$/';
+        $maxUntestedFieldsRegex = /** @lang RegExp */
+            '/^--gql-untested-count=(.*)$/';
         $command = preg_grep($maxUntestedFieldsRegex, $arguments);
 
         if ($command === false || count($command) === 0) {
@@ -124,12 +115,12 @@ class Plugin implements AddsOutput, HandlesArguments
 
         preg_match($maxUntestedFieldsRegex, array_pop($command), $matches);
 
-        $this->maxUntestedFieldsCount = is_numeric($matches[1]) ? (int) $matches[1] : $this->maxUntestedFieldsCount;
+        $this->maxUntestedFieldsCount = is_numeric($matches[1]) ? (int)$matches[1] : $this->maxUntestedFieldsCount;
     }
 
     public function addOutput(int $testReturnCode): int
     {
-        if ($this->coverage === false) {
+        if (self::isEnabled() === false) {
             return $testReturnCode;
         }
 
@@ -174,7 +165,9 @@ class Plugin implements AddsOutput, HandlesArguments
 
         if ($code !== 0) {
             $this->output->writeln("Schema command failed: $code");
-            throw new \RuntimeException("invalid command");
+            $this->output->writeln($output);
+
+            throw new RuntimeException("invalid command");
         }
 
         $output = implode(PHP_EOL, $output);

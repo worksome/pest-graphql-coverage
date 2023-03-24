@@ -19,11 +19,10 @@
         "php": "^8.2",
         "illuminate/contracts": "^10.0",
         "nuwave/lighthouse": "^6.0.0",
-        "pestphp/pest": "^2.0",
+        "pestphp/pest": "^2.2.3",
         "pestphp/pest-plugin-laravel": "^2.0"
     },
     "require-dev": {
-        "brianium/paratest": "^7.1",
         "nunomaduro/collision": "^7.0",
         "nunomaduro/larastan": "^2.4",
         "orchestra/testbench": "^8.0",
