@@ -56,7 +56,7 @@ php artisan test --gql-coverage --schema-command="php artisan lighthouse:print-s
 ### Excluding nodes from total coverage
 
 By default, all nodes will be included when calculating coverage. However, if you have nodes such as the built-in
-Lighthouse pagination types that you do not want to be covered, you can disable these from your Pest configuration.
+Lighthouse pagination types that you do not want to be covered, you can configure ignored fields from your `Pest.php` configuration file.
 
 ```php
 <?php
