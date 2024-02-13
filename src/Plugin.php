@@ -42,7 +42,7 @@ class Plugin implements AddsOutput, HandlesArguments
 
     public function handleArguments(array $arguments): array
     {
-        if (!($coverageIndex = array_search('--gql-coverage', $arguments)) && !self::isEnabled()) {
+        if (! ($coverageIndex = array_search('--gql-coverage', $arguments)) && ! self::isEnabled()) {
             return $arguments;
         }
 
@@ -81,7 +81,7 @@ class Plugin implements AddsOutput, HandlesArguments
         unset($arguments[array_keys($min)[0]]);
 
         preg_match($coverageMinRegex, array_pop($min), $matches);
-        $this->coverageMin = (int)$matches[1];
+        $this->coverageMin = (int) $matches[1];
     }
 
     private function handleSchemaCommand(array &$arguments): void
@@ -115,13 +115,13 @@ class Plugin implements AddsOutput, HandlesArguments
 
         preg_match($maxUntestedFieldsRegex, array_pop($command), $matches);
 
-        $this->maxUntestedFieldsCount = is_numeric($matches[1]) ? (int)$matches[1] : $this->maxUntestedFieldsCount;
+        $this->maxUntestedFieldsCount = is_numeric($matches[1]) ? (int) $matches[1] : $this->maxUntestedFieldsCount;
     }
 
-    public function addOutput(int $testReturnCode): int
+    public function addOutput(int $exitCode): int
     {
         if (self::isEnabled() === false) {
-            return $testReturnCode;
+            return $exitCode;
         }
 
         $style = new SymfonyStyle(new ArrayInput([]), $this->output);
@@ -159,7 +159,7 @@ class Plugin implements AddsOutput, HandlesArguments
             return 1;
         }
 
-        return $testReturnCode;
+        return $exitCode;
     }
 
     private function collectAllNodesFromSchema(): array

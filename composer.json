@@ -1,6 +1,6 @@
 {
     "name": "worksome/pest-graphql-coverage",
-    "description": "A plugin for PestPHP to add GraphQL coverage via LighthousePHP",
+    "description": "A plugin for Pest to add GraphQL coverage via Lighthouse",
     "keywords": [
         "worksome",
         "laravel",
@@ -8,25 +8,18 @@
     ],
     "homepage": "https://github.com/worksome/pest-graphql-coverage",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Oliver Nybroe",
-            "email": "oliver@worksome.com",
-            "role": "Developer"
-        }
-    ],
     "require": {
         "php": "^8.2",
-        "illuminate/contracts": "^10.0",
-        "nuwave/lighthouse": "^6.0.0",
-        "pestphp/pest": "^2.2.3",
-        "pestphp/pest-plugin-laravel": "^2.0"
+        "illuminate/contracts": "^10.0 || ^11.0",
+        "nuwave/lighthouse": "^6.33",
+        "pestphp/pest": "^2.33",
+        "pestphp/pest-plugin-laravel": "^2.2"
     },
     "require-dev": {
-        "nunomaduro/collision": "^7.0",
-        "nunomaduro/larastan": "^2.4",
-        "orchestra/testbench": "^8.0",
-        "worksome/coding-style": "^2.5"
+        "nunomaduro/collision": "^7.10 || ^8.1",
+        "larastan/larastan": "^2.6",
+        "orchestra/testbench": "^8.21 || ^9.0",
+        "worksome/coding-style": "^2.8"
     },
     "autoload": {
         "psr-4": {
