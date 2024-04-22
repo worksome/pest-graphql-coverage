@@ -24,7 +24,7 @@ php artisan test --gql-coverage
 It can even be used together with parallel
 
 ```bash
-php artisan test -p --gql-coverage
+php artisan test --gql-coverage -p
 ```
 
 ### Setting coverage limits
