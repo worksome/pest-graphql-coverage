@@ -139,7 +139,15 @@ class Plugin implements AddsOutput, HandlesArguments
         $untested = array_diff_key($dottedNodes, $dottedTestedNodes);
 
         // Remove ignored nodes
-        $untested = array_diff_key($untested, Config::ignoredNodes());
+        foreach ($untested as $node => $tested) {
+            foreach (Config::ignoredNodes() as $expression) {
+                if (fnmatch($expression, $node)) {
+                    unset($untested[$node]);
+
+                    break;
+                }
+            }
+        }
 
         // Count the nodes and calculate the percentage of tested nodes.
         $totalNodes = count($dottedNodes);

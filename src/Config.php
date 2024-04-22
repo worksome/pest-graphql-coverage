@@ -6,25 +6,51 @@ namespace Worksome\PestGraphqlCoverage;
 
 final class Config
 {
-    /** @var array<string, mixed> */
+    /** @return array<int, string> */
     private static array $ignoredNodes = [];
+
+    private static bool $ignorePaginatorInfo = false;
 
     public static function new(): self
     {
         return new self();
     }
 
-    /** @param  array<string>  $ignoredNodes */
+    /** @param array<int, string> $ignoredNodes */
     public function ignore(array $ignoredNodes): self
     {
-        self::$ignoredNodes = array_merge(self::$ignoredNodes, array_flip($ignoredNodes));
+        self::$ignoredNodes = [
+            ...self::$ignoredNodes,
+            ...$ignoredNodes,
+        ];
 
         return $this;
     }
 
-    /** @return array<string, mixed> */
+    public function ignorePaginatorInfo(bool $ignorePaginatorInfo = true): self
+    {
+        self::$ignorePaginatorInfo = $ignorePaginatorInfo;
+
+        return $this;
+    }
+
+    /** @return array<int, string> */
     public static function ignoredNodes(): array
     {
-        return self::$ignoredNodes;
+        return [
+            ...self::$ignoredNodes,
+            ...self::getPaginatorInfoNodes(),
+        ];
+    }
+
+    /** @return array<int, string> */
+    private static function getPaginatorInfoNodes(): array
+    {
+        return self::$ignorePaginatorInfo ? [
+            '*.paginatorInfo',
+            'PaginatorInfo.*',
+            'SimplePaginatorInfo.*',
+            'PageInfo.*',
+        ] : [];
     }
 }
