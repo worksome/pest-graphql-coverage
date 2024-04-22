@@ -63,12 +63,17 @@ Lighthouse pagination types that you do not want to be covered, you can configur
 
 declare(strict_types=1);
 
-use Worksome\PestGraphqlCoverage\Config;
+use Worksome\PestGraphqlCoverage\Config as GraphQLCoverageConfig;
 
-Config::new()->ignore([
-    'PaginatorInfo.count',
-    // ...
-]);
+GraphQLCoverageConfig::new()
+    ->ignore([
+        'PaginatorInfo.count',
+        // ...
+    ]);
+
+// Exclude all paginator info nodes
+GraphQLCoverageConfig::new()
+    ->ignorePaginatorInfo();
 ```
 
 ### Native Pest usage

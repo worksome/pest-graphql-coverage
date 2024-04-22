@@ -11,15 +11,15 @@
     "require": {
         "php": "^8.2",
         "illuminate/contracts": "^10.0 || ^11.0",
-        "nuwave/lighthouse": "^6.33",
-        "pestphp/pest": "^2.33",
-        "pestphp/pest-plugin-laravel": "^2.2"
+        "nuwave/lighthouse": "^6.36",
+        "pestphp/pest": "^2.34",
+        "pestphp/pest-plugin-laravel": "^2.3"
     },
     "require-dev": {
         "nunomaduro/collision": "^7.10 || ^8.1",
-        "larastan/larastan": "^2.6",
-        "orchestra/testbench": "^8.21 || ^9.0",
-        "worksome/coding-style": "^2.8"
+        "larastan/larastan": "^2.9",
+        "orchestra/testbench": "^8.22 || ^9.0",
+        "worksome/coding-style": "^2.10.2"
     },
     "autoload": {
         "psr-4": {
