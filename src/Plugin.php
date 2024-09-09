@@ -73,7 +73,7 @@ class Plugin implements AddsOutput, HandlesArguments
     private function handleMinCoverage(array &$arguments): void
     {
         $coverageMinRegex = /** @lang RegExp */
-            '/^--gql-min=(\d+)$/';
+            '/^--gql-min=(?<value>\d+)$/';
         $min = preg_grep($coverageMinRegex, $arguments);
 
         if ($min === false || count($min) === 0) {
@@ -84,17 +84,17 @@ class Plugin implements AddsOutput, HandlesArguments
 
         preg_match($coverageMinRegex, array_pop($min), $matches);
 
-        if (! isset($matches[1])) {
+        if (! isset($matches['value'])) {
             return;
         }
 
-        $this->coverageMin = (int) $matches[1];
+        $this->coverageMin = (int) $matches['value'];
     }
 
     private function handleSchemaCommand(array &$arguments): void
     {
         $schemaCommandRegex = /** @lang RegExp */
-            '/^--schema-command=(.*)$/';
+            '/^--schema-command=(?<value>.*)$/';
         $command = preg_grep($schemaCommandRegex, $arguments);
 
         if ($command === false || count($command) === 0) {
@@ -105,17 +105,17 @@ class Plugin implements AddsOutput, HandlesArguments
 
         preg_match($schemaCommandRegex, array_pop($command), $matches);
 
-        if (! isset($matches[1])) {
+        if (! isset($matches['value'])) {
             return;
         }
 
-        $this->schemaCommand = $matches[1];
+        $this->schemaCommand = $matches['value'];
     }
 
     private function handleMaxUntestedFields(array &$arguments): void
     {
         $maxUntestedFieldsRegex = /** @lang RegExp */
-            '/^--gql-untested-count=(.*)$/';
+            '/^--gql-untested-count=(?<value>.*)$/';
         $command = preg_grep($maxUntestedFieldsRegex, $arguments);
 
         if ($command === false || count($command) === 0) {
@@ -126,11 +126,13 @@ class Plugin implements AddsOutput, HandlesArguments
 
         preg_match($maxUntestedFieldsRegex, array_pop($command), $matches);
 
-        if (! isset($matches[1])) {
+        if (! isset($matches['value'])) {
             return;
         }
 
-        $this->maxUntestedFieldsCount = is_numeric($matches[1]) ? (int) $matches[1] : $this->maxUntestedFieldsCount;
+        $this->maxUntestedFieldsCount = is_numeric($matches['value'])
+            ? (int) $matches['value']
+            : $this->maxUntestedFieldsCount;
     }
 
     public function addOutput(int $exitCode): int
