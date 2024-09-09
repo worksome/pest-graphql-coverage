@@ -12,14 +12,14 @@
         "php": "^8.2",
         "illuminate/contracts": "^10.0 || ^11.0",
         "nuwave/lighthouse": "^6.36",
-        "pestphp/pest": "^2.34",
-        "pestphp/pest-plugin-laravel": "^2.3"
+        "pestphp/pest": "^2.35 || ^3.0",
+        "pestphp/pest-plugin-laravel": "^2.3 || ^3.0"
     },
     "require-dev": {
-        "nunomaduro/collision": "^7.10 || ^8.1",
+        "nunomaduro/collision": "^7.10 || ^8.4",
         "larastan/larastan": "^2.9",
-        "orchestra/testbench": "^8.22 || ^9.0",
-        "worksome/coding-style": "^2.10.2"
+        "orchestra/testbench": "^8.26 || ^9.0",
+        "worksome/coding-style": "^2.11"
     },
     "autoload": {
         "psr-4": {

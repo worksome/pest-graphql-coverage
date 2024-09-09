@@ -12,6 +12,7 @@ use GraphQL\Language\Visitor;
 use Illuminate\Support\Arr;
 use Pest\Contracts\Plugins\AddsOutput;
 use Pest\Contracts\Plugins\HandlesArguments;
+use Pest\Plugins\Concerns\HandleArguments;
 use Pest\Plugins\Parallel;
 use RuntimeException;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -20,15 +21,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class Plugin implements AddsOutput, HandlesArguments
 {
+    use HandleArguments;
+
     private const SERVER_VARIABLE_NAME = 'GQL_COVERAGE_ENABLED';
 
     public int $maxUntestedFieldsCount = 10;
 
     public string $schemaCommand = 'php artisan lighthouse:print-schema';
 
-    /**
-     * The minimum coverage.
-     */
     public float $coverageMin = 0.0;
 
     public function __construct(private readonly OutputInterface $output)
@@ -42,12 +42,14 @@ class Plugin implements AddsOutput, HandlesArguments
 
     public function handleArguments(array $arguments): array
     {
-        if (! ($coverageIndex = array_search('--gql-coverage', $arguments)) && ! self::isEnabled()) {
+        $hasOption = $this->hasArgument('--gql-coverage', $arguments);
+
+        if (! $hasOption && ! self::isEnabled()) {
             return $arguments;
         }
 
-        if ($coverageIndex) {
-            unset($arguments[$coverageIndex]);
+        if ($hasOption) {
+            $arguments = $this->popArgument('--gql-coverage', $arguments);
         }
 
         $this->handleEnablingCoverage($arguments);
@@ -81,6 +83,11 @@ class Plugin implements AddsOutput, HandlesArguments
         unset($arguments[array_keys($min)[0]]);
 
         preg_match($coverageMinRegex, array_pop($min), $matches);
+
+        if (! isset($matches[1])) {
+            return;
+        }
+
         $this->coverageMin = (int) $matches[1];
     }
 
@@ -98,6 +105,10 @@ class Plugin implements AddsOutput, HandlesArguments
 
         preg_match($schemaCommandRegex, array_pop($command), $matches);
 
+        if (! isset($matches[1])) {
+            return;
+        }
+
         $this->schemaCommand = $matches[1];
     }
 
@@ -114,6 +125,10 @@ class Plugin implements AddsOutput, HandlesArguments
         unset($arguments[array_keys($command)[0]]);
 
         preg_match($maxUntestedFieldsRegex, array_pop($command), $matches);
+
+        if (! isset($matches[1])) {
+            return;
+        }
 
         $this->maxUntestedFieldsCount = is_numeric($matches[1]) ? (int) $matches[1] : $this->maxUntestedFieldsCount;
     }

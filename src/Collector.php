@@ -15,15 +15,15 @@ class Collector
     public static function reset(): void
     {
         $filePath = self::filePath();
+
         if (! file_exists($filePath)) {
             return;
         }
+
         unlink($filePath);
     }
 
-    /**
-     * @return array<int, string>
-     */
+    /** @return array<int, string> */
     public static function parseResult(): array
     {
         $data = file_get_contents(self::filePath());

@@ -15,7 +15,7 @@ class PestGraphqlCoverageServiceProvider extends ServiceProvider
             return;
         }
 
-        // Check if gql coverage is enabled, either via parallel or non-parallel
+        // Check if GraphQL coverage is enabled, either via parallel or non-parallel.
         if (Plugin::isEnabled()) {
             /** @var Repository $config */
             $config = $this->app->get(Repository::class);
