@@ -181,6 +181,7 @@ class Plugin implements AddsOutput, HandlesArguments
 
         if ($this->coverageMin > $percentage) {
             $style->writeln("Min coverage of $this->coverageMin% not reached!");
+
             return 1;
         }
 
@@ -195,7 +196,7 @@ class Plugin implements AddsOutput, HandlesArguments
             $this->output->writeln("Schema command failed: $code");
             $this->output->writeln($output);
 
-            throw new RuntimeException("invalid command");
+            throw new RuntimeException('invalid command');
         }
 
         $output = implode(PHP_EOL, $output);
@@ -215,7 +216,7 @@ class Plugin implements AddsOutput, HandlesArguments
                 }
 
                 $nodes[$parentType->name->value][$node->name->value] = true;
-            }
+            },
         ]);
 
         return $nodes;

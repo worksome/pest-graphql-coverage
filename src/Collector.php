@@ -29,9 +29,7 @@ class Collector
         $data = file_get_contents(self::filePath());
         assert(is_string($data));
 
-        $exploded = explode(PHP_EOL, $data);
-        assert(is_array($exploded));
-        return $exploded;
+        return explode(PHP_EOL, $data);
     }
 
     public static function addResult(FieldValue $fieldValue): void
@@ -41,7 +39,7 @@ class Collector
         assert(is_resource($stream));
 
         fwrite($stream, sprintf(
-            "%s.%s%s",
+            '%s.%s%s',
             $fieldValue->getParentName(),
             $fieldValue->getFieldName(),
             PHP_EOL
