@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Worksome\PestGraphqlCoverage;
 
+use GraphQL\Language\AST\DirectiveNode;
 use Nuwave\Lighthouse\Schema\Values\FieldValue;
 
 class Collector
@@ -34,6 +35,10 @@ class Collector
 
     public static function addResult(FieldValue $fieldValue): void
     {
+        if (Config::shouldIgnoreDeprecatedFields() && self::isFieldDeprecated($fieldValue)) {
+            return;
+        }
+
         $filePath = self::filePath();
         $stream = fopen($filePath, 'a');
         assert(is_resource($stream));
@@ -44,6 +49,7 @@ class Collector
             $fieldValue->getFieldName(),
             PHP_EOL
         ));
+
         fclose($stream);
     }
 
@@ -54,5 +60,17 @@ class Collector
             '.temp',
             'gql-coverage.php',
         ]);
+    }
+
+    private static function isFieldDeprecated(FieldValue $fieldValue): bool
+    {
+        foreach ($fieldValue->getField()->directives as $directive) {
+            /** @var DirectiveNode $directive */
+            if ($directive->name->value === 'deprecated') {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
