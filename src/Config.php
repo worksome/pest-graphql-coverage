@@ -11,6 +11,8 @@ final class Config
 
     private static bool $ignorePaginatorInfo = false;
 
+    private static bool $ignoreDeprecatedFields = false;
+
     public static function new(): self
     {
         return new self();
@@ -34,13 +36,30 @@ final class Config
         return $this;
     }
 
-    /** @return array<int, string> */
+    public function ignoreDeprecatedFields(bool $ignoreDeprecatedFields = true): self
+    {
+        self::$ignoreDeprecatedFields = $ignoreDeprecatedFields;
+
+        return $this;
+    }
+
+    /**
+     * @internal
+     *
+     * @return array<int, string>
+     */
     public static function ignoredNodes(): array
     {
         return [
             ...self::$ignoredNodes,
             ...self::getPaginatorInfoNodes(),
         ];
+    }
+
+    /** @internal */
+    public static function shouldIgnoreDeprecatedFields(): bool
+    {
+        return self::$ignoreDeprecatedFields;
     }
 
     /** @return array<int, string> */
