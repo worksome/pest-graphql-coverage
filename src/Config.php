@@ -6,17 +6,19 @@ namespace Worksome\PestGraphqlCoverage;
 
 final class Config
 {
-    /** @return array<int, string> */
+    /** @var list<string> */
     private static array $ignoredNodes = [];
 
     private static bool $ignorePaginatorInfo = false;
+
+    private static bool $ignoreDeprecatedFields = false;
 
     public static function new(): self
     {
         return new self();
     }
 
-    /** @param array<int, string> $ignoredNodes */
+    /** @param list<string> $ignoredNodes */
     public function ignore(array $ignoredNodes): self
     {
         self::$ignoredNodes = [
@@ -34,7 +36,18 @@ final class Config
         return $this;
     }
 
-    /** @return array<int, string> */
+    public function ignoreDeprecatedFields(bool $ignoreDeprecatedFields = true): self
+    {
+        self::$ignoreDeprecatedFields = $ignoreDeprecatedFields;
+
+        return $this;
+    }
+
+    /**
+     * @internal
+     *
+     * @return list<string>
+     */
     public static function ignoredNodes(): array
     {
         return [
@@ -43,7 +56,13 @@ final class Config
         ];
     }
 
-    /** @return array<int, string> */
+    /** @internal */
+    public static function shouldIgnoreDeprecatedFields(): bool
+    {
+        return self::$ignoreDeprecatedFields;
+    }
+
+    /** @return list<string> */
     private static function getPaginatorInfoNodes(): array
     {
         return self::$ignorePaginatorInfo ? [

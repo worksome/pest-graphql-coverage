@@ -3,7 +3,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/worksome/pest-graphql-coverage.svg?style=flat-square)](https://packagist.org/packages/worksome/pest-graphql-coverage)
 [![Total Downloads](https://img.shields.io/packagist/dt/worksome/pest-graphql-coverage.svg?style=flat-square)](https://packagist.org/packages/worksome/pest-graphql-coverage)
 
-This plugin adds supports for showing the coverage of the GraphQL schema (Lighthouse only).
+This plugin adds support for showing the coverage of the GraphQL schema (Lighthouse only).
 
 ## Installation
 
@@ -74,6 +74,10 @@ GraphQLCoverageConfig::new()
 // Exclude all paginator info nodes
 GraphQLCoverageConfig::new()
     ->ignorePaginatorInfo();
+
+// Exclude all deprecated fields
+GraphQLCoverageConfig::new()
+    ->ignoreDeprecatedFields();
 ```
 
 ### Native Pest usage
