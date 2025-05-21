@@ -9,6 +9,9 @@ final class Config
     /** @var list<string> */
     private static array $ignoredNodes = [];
 
+    /** @var list<string> */
+    private static array $deprecatedFields = [];
+
     private static bool $ignorePaginatorInfo = false;
 
     private static bool $ignoreDeprecatedFields = false;
@@ -52,6 +55,7 @@ final class Config
     {
         return [
             ...self::$ignoredNodes,
+            ...self::$deprecatedFields,
             ...self::getPaginatorInfoNodes(),
         ];
     }
@@ -60,6 +64,12 @@ final class Config
     public static function shouldIgnoreDeprecatedFields(): bool
     {
         return self::$ignoreDeprecatedFields;
+    }
+
+    /** @internal */
+    public static function addDeprecatedField(string $deprecatedField): void
+    {
+        self::$deprecatedFields[] = $deprecatedField;
     }
 
     /** @return list<string> */

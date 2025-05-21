@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Worksome\PestGraphqlCoverage;
 
+use GraphQL\Language\AST\DirectiveNode;
 use GraphQL\Language\AST\FieldDefinitionNode;
 use GraphQL\Language\AST\InterfaceTypeDefinitionNode;
 use GraphQL\Language\AST\NodeKind;
@@ -24,6 +25,8 @@ class Plugin implements AddsOutput, HandlesArguments
     use HandleArguments;
 
     private const SERVER_VARIABLE_NAME = 'GQL_COVERAGE_ENABLED';
+
+    private int $numberOfDeprecatedFields = 0;
 
     public int $maxUntestedFieldsCount = 10;
 
@@ -173,6 +176,10 @@ class Plugin implements AddsOutput, HandlesArguments
 
         $style->writeln("GraphQL coverage:  $percentage% ($totalTestedNodes/$totalNodes fields)");
 
+        if (Config::shouldIgnoreDeprecatedFields() && $this->numberOfDeprecatedFields > 0) {
+            $style->writeln($this->numberOfDeprecatedFields . ' deprecated fields were ignored.');
+        }
+
         if ($untested !== []) {
             $style->newLine();
             $style->writeln("Untested fields (max. {$this->maxUntestedFieldsCount}): ");
@@ -215,10 +222,32 @@ class Plugin implements AddsOutput, HandlesArguments
                     return;
                 }
 
+                if (Config::shouldIgnoreDeprecatedFields() && self::isFieldDeprecated($node)) {
+                    Config::addDeprecatedField(
+                        sprintf('%s.%s', $parentType->name->value, $node->name->value)
+                    );
+
+                    $this->numberOfDeprecatedFields++;
+
+                    return;
+                }
+
                 $nodes[$parentType->name->value][$node->name->value] = true;
             },
         ]);
 
         return $nodes;
+    }
+
+    private static function isFieldDeprecated(FieldDefinitionNode $node): bool
+    {
+        foreach ($node->directives as $directive) {
+            /** @var DirectiveNode $directive */
+            if ($directive->name->value === 'deprecated') {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
