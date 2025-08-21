@@ -9,16 +9,16 @@
     "homepage": "https://github.com/worksome/pest-graphql-coverage",
     "license": "MIT",
     "require": {
-        "php": "^8.2",
-        "illuminate/contracts": "^11.0 || ^12.0",
-        "nuwave/lighthouse": "^6.44",
-        "pestphp/pest": "^3.0",
-        "pestphp/pest-plugin-laravel": "^3.0"
+        "php": "^8.3",
+        "illuminate/contracts": "^12.0",
+        "nuwave/lighthouse": "^6.62",
+        "pestphp/pest": "^4.0",
+        "pestphp/pest-plugin-laravel": "^4.0"
     },
     "require-dev": {
-        "larastan/larastan": "^3.1",
-        "nunomaduro/collision": "^7.10 || ^8.1.1",
-        "orchestra/testbench": "^9.12 || ^10.1",
+        "larastan/larastan": "^3.6",
+        "nunomaduro/collision": "^8.8",
+        "orchestra/testbench": "^10.1",
         "worksome/coding-style": "^3.2"
     },
     "autoload": {
