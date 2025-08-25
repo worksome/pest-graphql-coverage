@@ -12,8 +12,8 @@
         "php": "^8.2",
         "illuminate/contracts": "^11.0 || ^12.0",
         "nuwave/lighthouse": "^6.44",
-        "pestphp/pest": "^3.0",
-        "pestphp/pest-plugin-laravel": "^3.0"
+        "pestphp/pest": "^3.0 || ^4.0",
+        "pestphp/pest-plugin-laravel": "^3.0 || ^4.0"
     },
     "require-dev": {
         "larastan/larastan": "^3.1",
