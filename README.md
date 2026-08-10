@@ -1,11 +1,9 @@
-# PestPHP GraphQL Coverage
+# Pest GraphQL Coverage
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/worksome/pest-graphql-coverage.svg?style=flat-square)](https://packagist.org/packages/worksome/pest-graphql-coverage)
 [![Total Downloads](https://img.shields.io/packagist/dt/worksome/pest-graphql-coverage.svg?style=flat-square)](https://packagist.org/packages/worksome/pest-graphql-coverage)
 
 This plugin adds support for showing the coverage of the GraphQL schema (Lighthouse only).
-
-**Supports Pest 3 and Pest 4** - automatically detects and works with both versions.
 
 ## Installation
 
@@ -89,15 +87,6 @@ This also works natively with Pest (without using Artisan), as it is a Pest plug
 ```shell
 vendor/bin/pest --gql-coverage
 ```
-
-## Version Compatibility
-
-This package supports both Pest 3 and Pest 4:
-
-- **Pest 3**: Requires PHP 8.2+
-- **Pest 4**: Requires PHP 8.3+
-
-The package will automatically work with whichever version of Pest you have installed. No code changes are required when upgrading from Pest 3 to Pest 4.
 
 ## License
 
